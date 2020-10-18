@@ -3,9 +3,10 @@ import java.util.*;
 
 /**
  * A class for creating log files of random data.
+ * Adding ability to create a multi-year logfile for 7.19
  * 
- * @author David J. Barnes and Michael Kölling
- * @version    2016.02.29
+ * @author Karen Stagg
+ * @version   October 19, 2020
  */
 public class LogfileCreator
 {
