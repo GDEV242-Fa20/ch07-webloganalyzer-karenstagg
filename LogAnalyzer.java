@@ -88,6 +88,27 @@ public class LogAnalyzer
         } 
         return quietestHour;
     }
+
+    /**
+     * Finds the busiest consecutive two hours (most accesses) from the log file.
+     * @return returns an integer for the starting hour of the busiest two hour period
+     */
+    public int busiestTwoHour()
+    {
+        int startBusiestTwoHour = 0;
+        int busiestTwoHourTotal = 0;
+        //Only need to go to hour 22 to compare hour 22 to hour 23
+        for (int hour = 0; hour < hourCounts.length -1; hour++) 
+        {
+            if (hourCounts[hour] + hourCounts[hour + 1] >  busiestTwoHourTotal)
+                      
+            {            
+                    startBusiestTwoHour = hour;
+                    busiestTwoHourTotal = hourCounts[hour] + hourCounts[hour + 1];
+            }    
+        } 
+        return startBusiestTwoHour;
+    }
     
     /**
      * Return the number of accesses recorded in the log file.
