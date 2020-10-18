@@ -25,7 +25,7 @@ public class LogAnalyzer
         // Create the reader to obtain the data.
         reader = new LogfileReader();
     }
-   
+
     /**
      * Overlaoded Constructor to add your own filemane instead of using default.
      * Create an object to analyze hourly web accesses.
@@ -52,7 +52,25 @@ public class LogAnalyzer
             hourCounts[hour]++;
         }
     }
-    
+
+    /**
+     * Find the busiest hour from the log file.
+     * @return returns an integer for the busiest hour
+     */
+    public int busiestHour()
+    {
+        int busiestHour = 0;
+        //Start comparision of hour 0 to hour 1
+        for (int hour = 1; hour < hourCounts.length; hour++) 
+        {
+            if (hourCounts[hour] > hourCounts[busiestHour])
+            {
+                busiestHour = hour;
+            }    
+        } 
+        return busiestHour;
+    }
+
     /**
      * Return the number of accesses recorded in the log file.
      * @return total is the int value of the number of accesses recorded 
@@ -62,12 +80,10 @@ public class LogAnalyzer
     {
         int total = 0;
         //Add the value in each element of hourCounts to total.
-        /*for (int index = 0; index < hourCounts.length; index++)
+        for (int index = 0; index < hourCounts.length; index++)
         {
-            total += hourCounts[index];
-        }*/
-        for (int hourCount:hourCounts)
-            total = total + hourCount;
+        total += hourCounts[index];
+        }
         return total;
     }
 
@@ -83,7 +99,7 @@ public class LogAnalyzer
             System.out.println(hour + ": " + hourCounts[hour]);
         }
     }
-    
+
     /**
      * Print the lines of data read by the LogfileReader
      */
