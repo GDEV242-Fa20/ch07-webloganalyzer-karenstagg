@@ -1,6 +1,7 @@
 /**
  * Read web server data and analyse hourly access patterns.
  * Supplying your own filename is an added feature.
+ * Also adding ability to analyze days patterns.
  * 
  * @author Karen Stagg
  * @version October 19,2020

@@ -5,9 +5,10 @@ import java.util.Calendar;
  * web-server log file.
  * Individual fields are made available via
  * accessors such as getHour() and getMinute().
+ * Adding additional accessor methods.
  * 
- * @author David J. Barnes and Michael Kölling.
- * @version    2016.02.29
+ * @author Karen Stagg
+ * @version  October 19, 2020
  */
 public class LogEntry implements Comparable<LogEntry>
 {
