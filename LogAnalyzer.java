@@ -54,7 +54,7 @@ public class LogAnalyzer
     }
 
     /**
-     * Find the busiest hour from the log file.
+     * Find the busiest hour (most accesses) from the log file.
      * @return returns an integer for the busiest hour
      */
     public int busiestHour()
@@ -71,6 +71,24 @@ public class LogAnalyzer
         return busiestHour;
     }
 
+    /**
+     * Finds the quietest hour (least accesses) from the log file.
+     * @return returns an integer for the quietest hour
+     */
+    public int quietestHour()
+    {
+        int quietestHour = 0;
+        //Start comparision of hour 0 to hour 1
+        for (int hour = 1; hour < hourCounts.length; hour++) 
+        {
+            if (hourCounts[hour] < hourCounts[quietestHour])
+            {
+                quietestHour = hour;
+            }    
+        } 
+        return quietestHour;
+    }
+    
     /**
      * Return the number of accesses recorded in the log file.
      * @return total is the int value of the number of accesses recorded 
