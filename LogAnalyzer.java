@@ -1,8 +1,7 @@
 /**
- * Read web server data and analyse hourly access patterns.
+ * Read web server data and analyse hourly, daily and monthly access patterns.
  * Supplying your own filename is an added feature.
- * Also adding ability to analyze hourly, daily, and monthly patterns.
- * 
+ *   
  * @author Karen Stagg
  * @version October 19,2020
  */
@@ -75,81 +74,38 @@ public class LogAnalyzer
     } 
 
     /**
-     * Analyze the hourly access data from the log file.
+     * Analyze the hour, day, and month access data from the log file.
      */
-    public void analyzeHourlyData()
-    {
-        while(reader.hasNext()) {
-            LogEntry entry = reader.next();
-            int hour = entry.getHour();
-            hourCounts[hour]++;
-        }
-    }
-    
-      /**
-     * Analyze the daily access data from the log file.
-     */
-    public void analyzeDailyData()
+    public void analyzeData()
     {
         while(reader.hasNext())
         {
             LogEntry entry = reader.next();
+            int hour = entry.getHour();
+            hourCounts[hour]++;
             int day = entry.getDay();
             dayCounts[day]++;
-        }
-        //Add back into array the days that didn't have activity
+            int month = entry.getMonth();
+            monthCounts[month]++;
+        }    
+        //Add back into array the days that didn't have activity due to small sample size
         for (int i = 0; i < dayCounts.length ; i++)
-        {
+            {
             if (dayCounts[i] < 0)
             {
                 dayCounts[i] = 0;
             }
         }
-        
-    }    
-    
-    /**
-     * Analyze the monthly access data from the log file.
-     */
-    public void analyzeMonthlyData()
-    {
-        while(reader.hasNext())
-        {
-            LogEntry entry = reader.next();
-            int month = entry.getMonth();
-            monthCounts[month]++;
-        }
-        //Add back into array the months that didn't have activity
+        //Add back into array the months that didn't have activity due to small sample size
         for (int i = 0; i < monthCounts.length ; i++)
         {
             if (monthCounts[i] < 0)
             {
                 monthCounts[i] = 0;
             }
-        }
-    }
-    
-    /**
-     * Analyze the yearly access data from the log file.
-     */
-    public void analyzeyYearlyData()
-    {
-        while(reader.hasNext())
-        {
-            LogEntry entry = reader.next();
-            int year = entry.getYear();
-            yearCounts[year]++;
-        }
-        //Add back into array the years that didn't have activity
-        for (int i = 0; i < yearCounts.length ; i++)
-        {
-            if (yearCounts[i] < 0)
-            {
-                yearCounts[i] = 0;
-            }
-        }
-    }
-    
+        } 
+    }    
+      
     /**
      * Find the busiest hour (most accesses) from the log file.
      * @return returns an integer for the busiest hour
@@ -228,8 +184,6 @@ public class LogAnalyzer
      */
     public int busiestDay()
     {
-        //Call the method to establish daily data
-        analyzeDailyData();     
         int busiestDay = 1;
         //Start comparision of day 1 to day 2
         for (int day = 1; day < dayCounts.length; day++) 
@@ -242,14 +196,12 @@ public class LogAnalyzer
         return busiestDay;
     }
     
-       /**
+    /**
      * Find the quietest day (least accesses)  of greater than 0 from the log file.
-     * @return returns an integer for the quietest day greater than 0.
+     * @return returns an integer for the quietest day greater than 0 (because of small sample size)
      */
     public int quietestDay()
     {
-        //Call the method to establish daily data
-        analyzeDailyData();     
         int quietestDay = 1;
         //Start comparision of day 1 to day 2
         for (int day = 2; day < dayCounts.length; day++) 
@@ -263,14 +215,12 @@ public class LogAnalyzer
     }
 
     /**
-     * Return and display the total number of accesses per month recorded in the log file.
-     * @return total is the int value of the number of monthly accesses recorded 
+     * DISPLAYS and Returns the detail of the total number of accesses per month recorded in the log file.
+     * @return total is the int value of the total number of monthly accesses recorded 
      * in the log file.
      */
     public int totalAccessesPerMonth()
     {
-        //Call the method to establish monthly data.
-        analyzeMonthlyData();
         int total = 0;
         System.out.println("Mo: Count");
         //Add the value in each element of monthCounts to total.
@@ -284,9 +234,64 @@ public class LogAnalyzer
     }
     
     /**
+     * Find the quietest month (least accesses)  of greater than 0 from the log file.
+     * @return returns an integer for the quietest month greater than 0 (because of small sample size)
+     */
+    public int quietestMonth()
+    {
+        int quietestMonth = 1;
+        //Start comparision of month 1 to day 2
+        for (int month = 2; month < monthCounts.length; month++) 
+        {
+                if (monthCounts[month] < monthCounts[quietestMonth] && monthCounts[month] > 0)
+                {
+                    quietestMonth = month;
+                } 
+        }
+        return quietestMonth;
+    }
+    
+    /**
+     * Find the busiest month (most accesses) from the log file.
+     * @return returns an integer for the busiest month
+     */
+    public int busiestMonth()
+    {
+        int busiestMonth = 1;
+        //Start comparision of day 1 to day 2
+        for (int month = 1; month < monthCounts.length; month++) 
+        {
+                if (monthCounts[month] > monthCounts[busiestMonth])
+                {
+                    busiestMonth = month;
+                } 
+        }
+        return busiestMonth;
+    }    
+    
+    /**
+     * Displays and returns the average number of Accesseses per month from the log file.
+     * @return returns a double with the average number of accesses per month
+     */
+    public double averageAccessesPerMonth() {
+        double avgMoAccesses = 0.0;
+        int total = 0;
+        System.out.println("Mo: Mo Accesses");
+        for (int month = 1; month < monthCounts.length; month++) 
+        {
+            System.out.println(month + ":     " + monthCounts[month]);
+            total+= monthCounts[month];
+        }
+        avgMoAccesses = (total/12.0);
+        System.out.print("Average accesses per month ");
+        System.out.printf("%.2f", avgMoAccesses); 
+        return avgMoAccesses;
+    } 
+    
+    /**
      * Print the hourly counts.
      * These should have been set with a prior
-     * call to analyzeHourlyData.
+     * call to analyzeData.
      */
     public void printHourlyCounts()
     {
